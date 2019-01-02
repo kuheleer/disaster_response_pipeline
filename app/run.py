@@ -45,6 +45,14 @@ def index():
     
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
+    ### data for visualizing category counts.
+    categ_sums = df.iloc[:, 4:].sum()
+    categ_names = list(categ_sums.index)
+
+    word_series = pd.Series(' '.join(df['message']).lower().split())
+    top_ten_words = word_series[~word_series.isin(stopwords.words("english"))].value_counts()[:10]
+    top_ten_words_name = list(top_ten_words.index)
+
     graphs = [
         {
             'data': [
@@ -61,6 +69,42 @@ def index():
                 },
                 'xaxis': {
                     'title': "Genre"
+                }
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    x=categ_names,
+                    y=categ_sums,
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of categories',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+
+                },
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    x=top_ten_words_name,
+                    y=top_ten_words
+                )
+            ],
+
+            'layout': {
+                'title': 'Most Frequent Words',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Words"
                 }
             }
         }
